@@ -3,25 +3,152 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <script src="moment.js"></script>
+    <style>
+
+    a {
+      color: red;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    a:visited {
+      color: red;
+    }
+
+      body {
+        margin: 0;
+        background-color: #ECE0E0;
+      }
+
+      .top_bar {
+        background-color: white;
+      }
+
+      .messages {
+        font-family: Verdana;
+        background-color: white;
+        margin: 0;
+        padding: 10px;
+        list-style-type: none;
+        float: left;
+        background-color: #ECE0E0;
+      }
+
+      h2 {
+        font-family: Verdana;
+        font-weight: normal;
+        padding-left: 10px;
+        background-color: white;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-top: 35px;
+        color: black;
+      }
+
+      #newTweets {
+        font-family: Tahoma;
+        padding: 10px;
+        margin: 15px 0 5px 15px;
+        border-radius: 7px;
+        background-color: #55acee;
+        color: white;
+        border-color: rgb(58, 126, 158);
+        text-align: center;
+        line-height: 17px;
+        font-size: 14px;
+      }
+
+      button:focus {
+        outline-style: none;
+      }
+
+      #newTweets:hover {
+        background-color: #5AA0D4;
+      }
+
+      .container {
+        position: absolute;
+        background-color: #ECE0E0;
+      }
+    </style>
   </head>
+
   <body>
+
     <script>
 
+
       $(document).ready(function(){
-        var $body = $('body');
-        $body.html('');
+
+         var $messages = $('.messages');
+          $messages.html('');
 
         var index = streams.home.length - 1;
-        while(index >= 0){
+          while(index >= 0){
+             var d = new Date();
+          var mins = d.getMinutes();
+          if(mins < 10){
+            mins = "0" + mins;
+          }
+          var time = d.getHours() + ':' + mins;
+
           var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
+          var $tweet = $('<li></li>');
+          $tweet.text(' ' + time + ': ' + tweet.message);
+          $tweet.appendTo('.messages');
           index -= 1;
-        }
+
+           $('<a>',{
+            text: '@' + tweet.user,
+            title: 'username',
+            href: 'http://twitter.com/' + tweet.user,
+            }).prependTo($tweet);
+        };
+
+        $('#newTweets').click(function() {
+          $messages.html('');
+
+           d = new Date();
+          mins = d.getMinutes();
+          if(mins < 10){
+            mins = "0" + mins;
+          }
+          time = d.getHours() + ':' + mins;
+
+          index = streams.home.length - 1;
+         while(index >= 0){
+          tweet = streams.home[index];
+          $tweet = $('<li>');
+          $tweet.text(' ' + time + ': ' + tweet.message);
+          $tweet.appendTo('.messages');
+          index -= 1;
+
+          $('<a>',{
+            text: '@' + tweet.user,
+            title: 'username',
+            href: 'http://google.com',
+            }).prependTo($tweet);
+
+        };
+
+        $('.messages').children('li').slice(11).remove();
+      });
 
       });
 
+
     </script>
+
+    <div class="top_bar">
+      <h2>twittler <img src="http://wiki.teamfortress.com/w/images/thumb/5/53/Twitter_bird_mini_icon.png/44px-Twitter_bird_mini_icon.png?t=20111215203312" /></h2>
+
+    </div>
+
+    <button id="newTweets">Get Tweets</button>
+    <div class="container">
+    <ul class="messages"></ul>
+    </div>
+
   </body>
 </html>
